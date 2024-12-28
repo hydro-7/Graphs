@@ -2,12 +2,13 @@
 using namespace std;
 
 class DisjointSet{
-    vector<int> rank, parent;
+    vector<int> size, rank, parent;
 
     public:
         DisjointSet(int n) // constructor which helps w initialization
         {
             rank.resize(n + 1, 0); // n + 1 for 1 based indexing
+            size.resize(n + 1, 1);
             parent.resize(n + 1);
 
             for(int i = 0; i <= n; i++) parent[i] = i;
@@ -35,6 +36,22 @@ class DisjointSet{
                 // OR
                 // parent[ult_par_u] = ult_par_v;
                 // rank[ult_par_v]++;
+            }
+        }
+
+        void unionBySize(int u, int v)
+        {
+            int ult_par_u = findUltimateParent(u), ult_par_v = findUltimateParent(v);
+
+            if(ult_par_u == ult_par_v) return;
+            
+            if(size[ult_par_u] < size[ult_par_v]) {
+                parent[ult_par_u] = ult_par_v;
+                size[ult_par_u] += size[ult_par_u];
+            }
+            else{
+                parent[ult_par_v] = ult_par_u;
+                size[ult_par_u] += size[ult_par_v];
             }
         }
 
